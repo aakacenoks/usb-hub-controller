@@ -11,6 +11,7 @@ class ArgumentParser(object):
         self._parser = argparse.ArgumentParser()
         self._port = None
         self._enable = None
+        self._serial_number = None
         self._output = sys.stderr
 
     @property
@@ -21,6 +22,10 @@ class ArgumentParser(object):
     def enable(self):
         return self._enable
 
+    @property
+    def serial_number(self):
+        return self._serial_number
+
     def print_usage(self):
         return self._parser.print_usage(self._output)
 
@@ -28,12 +33,33 @@ class ArgumentParser(object):
         return self._parser.print_help(self._output)
 
     def parse_arguments(self, args):
-        self._parser.add_argument("-p", "--port", help="Port to enable/disable", type=int, metavar='',
+        self._parser.add_argument("-p", "--port",
+                                  help="Port to enable/disable",
+                                  type=int,
+                                  metavar='',
                                   choices={0, 1, 2, 3, 4, 5, 6, 7})
-        self._parser.add_argument("-e", "--enable", help="Enable(True)/Disable(False) ", type=eval, metavar='',
+
+        self._parser.add_argument("-e", "--enable",
+                                  help="Enable(True)/Disable(False) ",
+                                  type=eval,
+                                  metavar='',
                                   choices={True, False})
+
+        self._parser.add_argument("-s", "--serial_number",
+                                  help="Serial number of the hub (only if more than one is conected)",
+                                  type=eval,
+                                  metavar='')
+
         args = self._parser.parse_args(args[1:])
+
+        print(args)
         self._port = args.port
+
+        if args.serial_number is None:
+            log("Serial number not provided, will detect automatically")
+        else:
+            self._serial_number = args.serial_number
+
         if args.enable is None:
             raise Exception("Please specify --enable=True or --enable=False")
         else:
@@ -63,7 +89,11 @@ def main(argv):
             return 1
 
         stem = brainstem.stem.USBHub3p()
-        result = stem.discoverAndConnect(1)
+
+        if args.serial_number is None:
+            result = stem.discoverAndConnect(1)
+        else:
+            result = stem.discoverAndConnect(1, serial_number=args.serial_number)
 
         if result == Result.NO_ERROR:
             if args.port is None:
