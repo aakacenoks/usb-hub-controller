@@ -11,7 +11,8 @@ Manage Acroname USBHub3+ remotely
 python toggle_ports.py --help
 
 arguments:
-  -h, --help      show this help message and exit
-  -p , --port     Port to enable/disable. All ports selected if not specified.
-  -e , --enable   Enable(True)/Disable(False)
+  -h, --help             Show this help message and exit
+  -p , --port            Port to enable/disable. All ports selected if not specified.
+  -e , --enable          Enable(True)/Disable(False)
+  -s , --serial_number   Serial number for specific usb hub (optional) 
 ```
