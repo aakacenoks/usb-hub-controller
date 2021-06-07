@@ -5,6 +5,7 @@ from brainstem.result import Result
 import sys
 import argparse
 
+
 class ArgumentParser(object):
     def __init__(self):
         self._parser = argparse.ArgumentParser()
@@ -27,8 +28,10 @@ class ArgumentParser(object):
         return self._parser.print_help(self._output)
 
     def parse_arguments(self, args):
-        self._parser.add_argument("-p", "--port", help="Port to enable/disable", type=int, metavar='', choices={0, 1, 2, 3, 4, 5, 6, 7})
-        self._parser.add_argument("-e", "--enable", help="Enable(True)/Disable(False) ", type=eval, metavar='', choices={True, False})
+        self._parser.add_argument("-p", "--port", help="Port to enable/disable", type=int, metavar='',
+                                  choices={0, 1, 2, 3, 4, 5, 6, 7})
+        self._parser.add_argument("-e", "--enable", help="Enable(True)/Disable(False) ", type=eval, metavar='',
+                                  choices={True, False})
         args = self._parser.parse_args(args[1:])
         self._port = args.port
         if args.enable is None:
@@ -36,10 +39,12 @@ class ArgumentParser(object):
         else:
             self._enable = args.enable
 
+
 def log(message):
     dt = datetime.now()
     timestamp = dt.strftime('%Y-%m-%d %H:%M:%S')
     print("[" + timestamp + "] " + str(message))
+
 
 def toggle_port(stem, enable, port):
     if enable:
@@ -48,6 +53,7 @@ def toggle_port(stem, enable, port):
     else:
         log("Disabling port " + str(port))
         stem.usb.setPortDisable(port)
+
 
 def main(argv):
     try:
