@@ -47,8 +47,8 @@ class ArgumentParser(object):
 
         self._parser.add_argument("-s", "--serial_number",
                                   help="Serial number of the hub (only if more than one is conected)",
-                                  type=eval,
-                                  metavar='')
+                                  action='store',
+                                  type=str)
 
         args = self._parser.parse_args(args[1:])
 
